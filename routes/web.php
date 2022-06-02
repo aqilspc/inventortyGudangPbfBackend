@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,4 +32,11 @@ Route::get('/api/material_all', [MaterialController::class, 'get']);
 Route::get('/api/material_by_id/{id}', [MaterialController::class, 'detail']);
 Route::put('/api/material_update', [MaterialController::class, 'update']);
 Route::delete('/api/material_delete', [MaterialController::class, 'delete']);
+
+//Route User
+Route::post('/api/user_insert', [UserController::class, 'insert']);
+Route::get('/api/user_all', [UserController::class, 'get']);
+Route::get('/api/user_by_id/{id}', [UserController::class, 'detail']);
+Route::put('/api/user_update', [UserController::class, 'update']);
+Route::delete('/api/user_delete', [UserController::class, 'delete']);
 
