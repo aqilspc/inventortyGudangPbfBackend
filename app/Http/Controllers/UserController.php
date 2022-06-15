@@ -71,9 +71,9 @@ class UserController extends Controller
                 );
     }
 
-    public function delete(Request $request){
+    public function delete($id){
         $this->database
-        ->getReference('user/' . $request->id_user)
+        ->getReference('user/' . $id)
         ->remove();
         return response()->json(
                 [

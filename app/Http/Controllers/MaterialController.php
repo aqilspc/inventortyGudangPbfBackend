@@ -71,9 +71,9 @@ class MaterialController extends Controller
                 );
     }
 
-    public function delete(Request $request){
+    public function delete($id){
         $this->database
-        ->getReference('material/' . $request->id_material)
+        ->getReference('material/' . $id)
         ->remove();
 
         return response()->json(

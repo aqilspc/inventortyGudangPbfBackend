@@ -13,7 +13,12 @@ class GudangController extends Controller
     }
 
     public function get(){
-        return response()->json($this->database->getReference('gudang')->getValue());
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "data" => $this->database->getReference('gudang')->getValue()]
+                );
     }
 
      public function detail($id){
@@ -63,9 +68,9 @@ class GudangController extends Controller
         //return response()->json('warehouse has been updated');
     }
 
-    public function delete(Request $request){
+    public function delete($id){
         $this->database
-        ->getReference('gudang/' . $request->id_gudang)
+        ->getReference('gudang/' . $id)
         ->remove();
 
         return response()->json(
