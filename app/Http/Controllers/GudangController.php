@@ -19,7 +19,12 @@ class GudangController extends Controller
      public function detail($id){
         $data = $this->database->getReference('gudang')->getValue();
         //$data[$id];
-        return response()->json($data[$id]);
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "data" => $data[$id]]
+                );
     }
 
 
@@ -33,8 +38,12 @@ class GudangController extends Controller
             'max_capacity' => $request->max_capacity,
             'min_capacity' => $request->min_capacity,
         ]);
-
-        return response()->json('warehouse has been created');
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "message" => 'warehouse has been added']
+                );
     }
 
     public function update(Request $request){
@@ -45,8 +54,13 @@ class GudangController extends Controller
             'max_capacity' => $request->max_capacity,
             'min_capacity' => $request->min_capacity,
         ]);
-
-        return response()->json('warehouse has been updated');
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "message" => 'warehouse has been updated']
+                );
+        //return response()->json('warehouse has been updated');
     }
 
     public function delete(Request $request){
@@ -54,7 +68,12 @@ class GudangController extends Controller
         ->getReference('gudang/' . $request->id_gudang)
         ->remove();
 
-        return response()->json('warehouse has been deleted');
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "message" => 'warehouse has been deleted']
+                );
     }
 
 }

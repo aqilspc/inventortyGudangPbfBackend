@@ -35,6 +35,7 @@ Route::delete('/api/material_delete', [MaterialController::class, 'delete']);
 
 //Route User
 Route::post('/api/user_insert', [UserController::class, 'insert']);
+Route::post('/api/user_login', [UserController::class, 'loginApps']);
 Route::get('/api/user_all', [UserController::class, 'get']);
 Route::get('/api/user_by_id/{id}', [UserController::class, 'detail']);
 Route::put('/api/user_update', [UserController::class, 'update']);

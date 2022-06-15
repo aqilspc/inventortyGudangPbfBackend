@@ -13,13 +13,23 @@ class UserController extends Controller
     }
 
     public function get(){
-        return response()->json($this->database->getReference('user')->getValue());
+        //return response()->json($this->database->getReference('user')->getValue());
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "data" => $this->database->getReference('user')->getValue()]
+                );
     }
 
      public function detail($id){
         $data = $this->database->getReference('user')->getValue();
-        //$data[$id];
-        return response()->json($data[$id]);
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "data" => $data[$id]]
+                );
     }
 
 
@@ -35,7 +45,12 @@ class UserController extends Controller
             
         ]);
 
-        return response()->json('users has been added');
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "message" => 'user has been added']
+                );
     }
 
     public function update(Request $request){
@@ -48,15 +63,81 @@ class UserController extends Controller
            'password' => $request->password
         ]);
 
-        return response()->json('user has been updated');
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "message" => 'user has been updated']
+                );
     }
 
     public function delete(Request $request){
         $this->database
         ->getReference('user/' . $request->id_user)
         ->remove();
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "message" => 'user has been deleted']
+                );
+        //return response()->json('user has been deleted');
+    }
 
-        return response()->json('user has been deleted');
+    public function loginApps(Request $request)
+    {
+        $username = $request->username;
+        $password = $request->password;
+
+        $data = $this->database->getReference('user')->getValue();
+        $resultUsername = false;
+        $resultPassword = false;
+        $arrUsername = [];
+        $arrPassword = [];
+        //$arr = [];
+        foreach ($data as $key => $value) {
+            if($username == $value['username']){
+                $resultUsername = true;
+                $arrUsername[] = $value;
+            }
+            if($password == $value['password']){
+                $resultPassword = true;
+                $arrPassword[] = $value;
+            }
+        }
+
+        if(!$resultUsername)
+        {
+            return response()->json(
+                [
+                    "status" => "failed"
+                    , "success" =>false
+                    , "message" => "Username not available"]
+                );
+        }
+        
+
+        if(!$resultPassword)
+        {
+            return response()->json(
+                [
+                     "status" => "failed"
+                    , "success" =>false
+                    , "message" => "Password not match"]
+                );
+        }
+        
+
+        if($resultPassword && $resultUsername)
+        {
+            return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "data" => $arrPassword]
+                );
+        }
+        
     }
 
 }

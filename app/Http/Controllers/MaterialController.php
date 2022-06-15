@@ -13,13 +13,25 @@ class MaterialController extends Controller
     }
 
     public function get(){
-        return response()->json($this->database->getReference('material')->getValue());
+        //return response()->json();
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "data" => $this->database->getReference('material')->getValue()]
+                );
     }
 
      public function detail($id){
         $data = $this->database->getReference('material')->getValue();
         //$data[$id];
-        return response()->json($data[$id]);
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "data" => $data[$id]]
+                );
+       // return response()->json();
     }
 
 
@@ -33,8 +45,12 @@ class MaterialController extends Controller
             'jenis_material' => $request->jenis_material,
             'jumlah_material' => $request->jumlah_material
         ]);
-
-        return response()->json('materials has been added');
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "message" => 'materials has been added']
+                );
     }
 
     public function update(Request $request){
@@ -47,7 +63,12 @@ class MaterialController extends Controller
             'jumlah_material' => $request->jumlah_material
         ]);
 
-        return response()->json('material has been updated');
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "message" => 'materials has been updated']
+                );
     }
 
     public function delete(Request $request){
@@ -55,7 +76,12 @@ class MaterialController extends Controller
         ->getReference('material/' . $request->id_material)
         ->remove();
 
-        return response()->json('material has been deleted');
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "message" => 'materials has been deleted']
+                );
     }
 
 }
