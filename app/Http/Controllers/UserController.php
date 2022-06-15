@@ -14,12 +14,22 @@ class UserController extends Controller
 
     public function get(){
        $data = $this->database->getReference('user')->getValue();
+       $arr = [];
+        $no=0;
+        foreach ($data as $key => $value) {
+
+            $arr[$no]['id'] = $value['id'];
+            $arr[$no]['name'] = $value['name'];
+            $arr[$no]['username'] = $value['username'];
+            $arr[$no]['password'] = $value['password'];
+            $no++;
+        }
         if($data != null){
             return response()->json(
                 [
                      "status" => "success"
                     , "success" =>true
-                    , "data" => $data]
+                    , "data" => $arr]
                 );
         }else{
             return response()->json(

@@ -14,12 +14,22 @@ class GudangController extends Controller
 
     public function get(){
         $data = $this->database->getReference('gudang')->getValue();
+        $arr = [];
+        $no=0;
+        foreach ($data as $key => $value) {
+
+            $arr[$no]['id'] = $value['id'];
+            $arr[$no]['name'] = $value['name'];
+            $arr[$no]['max_capacity'] = $value['max_capacity'];
+            $arr[$no]['min_capacity'] = $value['min_capacity'];
+            $no++;
+        }
         if($data != null){
             return response()->json(
                 [
                      "status" => "success"
                     , "success" =>true
-                    , "data" => $data]
+                    , "data" => $arr]
                 );
         }else{
             return response()->json(

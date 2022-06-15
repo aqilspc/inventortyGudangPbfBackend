@@ -17,34 +17,37 @@ class TransaksiController extends Controller
         $transaksi = $this->database->getReference('transaksi')->getValue();
        // $data = $this->database->getReference('gudang')->getValue();
         $arr = [];
+        $no = 0;
         if($transaksi != null){
             foreach ($transaksi as $tr => $trItem) {
                 $warehouse = $this->detailGudang($trItem['warehouse_id']);
                 $material = $this->detailMaterial($trItem['material_id']);
                 $user = $this->detailUser($trItem['user_id']);
                 $trId = $trItem['id'];
+                $arr[$no]['id'] = $trId;
                 if($material != null || !is_null($material))
                 {
-                    $arr[$trId]['material_name'] = $material['name'];
+                    $arr[$no]['material_name'] = $material['name'];
                 }else{
-                    $arr[$trId]['material_name'] = 'Data was deleted!';
+                    $arr[$no]['material_name'] = 'Data was deleted!';
                 }
 
                 if($warehouse != null || !is_null($warehouse))
                 {
-                    $arr[$trId]['warehouse_name'] = $warehouse['name'];
+                    $arr[$no]['warehouse_name'] = $warehouse['name'];
                 }else{
-                    $arr[$trId]['warehouse_name'] = 'Data was deleted!';
+                    $arr[$no]['warehouse_name'] = 'Data was deleted!';
                 }
 
                 if($user != null || !is_null($user))
                 {
-                    $arr[$trId]['user_name'] = $user['name'];
+                    $arr[$no]['user_name'] = $user['name'];
                 }else{
-                    $arr[$trId]['user_name'] = 'Data was deleted!';
+                    $arr[$no]['user_name'] = 'Data was deleted!';
                 }
 
-                 $arr[$trId]['date_transaction'] = $trItem['date_transaction']; 
+                 $arr[$no]['date_transaction'] = $trItem['date_transaction']; 
+                 $no++;
             }
         }
        if($transaksi != null){
