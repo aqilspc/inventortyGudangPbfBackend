@@ -38,7 +38,7 @@ class UserController extends Controller
         $this->database
         ->getReference('user/' . $unique)
         ->set([
-            'id_user'=>$unique,
+            'id'=>$unique,
             'name' => $request->name,
             'username' => $request->username,
             'password' => $request->password
@@ -55,7 +55,7 @@ class UserController extends Controller
 
     public function update(Request $request){
         $this->database
-        ->getReference('user/' . $request->id_user)
+        ->getReference('user/' . $request->id)
         ->update([
            // 'id_user'=>$unique,
            'name' => $request->name,

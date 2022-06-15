@@ -13,11 +13,11 @@ class TransaksiController extends Controller
     }
 
     public function get(){
-        return response()->json($this->database->getReference('material')->getValue());
+        return response()->json($this->database->getReference('transaksi')->getValue());
     }
 
      public function detail($id){
-        $data = $this->database->getReference('material')->getValue();
+        $data = $this->database->getReference('transaksi')->getValue();
         //$data[$id];
         return response()->json($data[$id]);
     }
@@ -26,36 +26,36 @@ class TransaksiController extends Controller
     public function insert(Request $request){
         $unique = strtotime(date('Y-m-d H:i:s'));
         $this->database
-        ->getReference('material/' . $unique)
+        ->getReference('transaksi/' . $unique)
         ->set([
-            'id_material'=>$unique,
+            'id'=>$unique,
             'name' => $request->name,
-            'jenis_material' => $request->jenis_material,
-            'jumlah_material' => $request->jumlah_material
+            'jenis_transaksi' => $request->jenis_transaksi,
+            'jumlah_transaksi' => $request->jumlah_transaksi
         ]);
 
-        return response()->json('materials has been added');
+        return response()->json('transaksis has been added');
     }
 
     public function update(Request $request){
         $this->database
-        ->getReference('material/' . $request->id_material)
+        ->getReference('transaksi/' . $request->id_transaksi)
         ->update([
-           // 'id_material'=>$unique,
+           // 'id_transaksi'=>$unique,
             'name' => $request->name,
-            'jenis_material' => $request->jenis_material,
-            'jumlah_material' => $request->jumlah_material
+            'jenis_transaksi' => $request->jenis_transaksi,
+            'jumlah_transaksi' => $request->jumlah_transaksi
         ]);
 
-        return response()->json('material has been updated');
+        return response()->json('transaksi has been updated');
     }
 
     public function delete(Request $request){
         $this->database
-        ->getReference('material/' . $request->id_material)
+        ->getReference('transaksi/' . $request->id_transaksi)
         ->remove();
 
-        return response()->json('material has been deleted');
+        return response()->json('transaksi has been deleted');
     }
 
 }

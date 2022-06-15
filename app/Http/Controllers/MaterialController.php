@@ -40,8 +40,9 @@ class MaterialController extends Controller
         $this->database
         ->getReference('material/' . $unique)
         ->set([
-            'id_material'=>$unique,
+            'id'=>$unique,
             'name' => $request->name,
+            'stock'=>0,
             'jenis_material' => $request->jenis_material,
             'jumlah_material' => $request->jumlah_material
         ]);
@@ -55,10 +56,11 @@ class MaterialController extends Controller
 
     public function update(Request $request){
         $this->database
-        ->getReference('material/' . $request->id_material)
+        ->getReference('material/' . $request->id)
         ->update([
            // 'id_material'=>$unique,
             'name' => $request->name,
+            //'stock'=>0,
             'jenis_material' => $request->jenis_material,
             'jumlah_material' => $request->jumlah_material
         ]);

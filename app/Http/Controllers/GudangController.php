@@ -38,7 +38,7 @@ class GudangController extends Controller
         $this->database
         ->getReference('gudang/' . $unique)
         ->set([
-            'id_gudang'=>$unique,
+            'id'=>$unique,
             'name' => $request->name,
             'max_capacity' => $request->max_capacity,
             'min_capacity' => $request->min_capacity,
@@ -53,7 +53,7 @@ class GudangController extends Controller
 
     public function update(Request $request){
         $this->database
-        ->getReference('gudang/' . $request->id_gudang)
+        ->getReference('gudang/' . $request->id)
         ->update([
             'name' => $request->name,
             'max_capacity' => $request->max_capacity,
