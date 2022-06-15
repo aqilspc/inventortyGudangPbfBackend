@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TransaksiController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,3 +42,6 @@ Route::get('/api/user_by_id/{id}', [UserController::class, 'detail']);
 Route::put('/api/user_update', [UserController::class, 'update']);
 Route::delete('/api/user_delete/{id}', [UserController::class, 'delete']);
 
+//Route Transaksi
+Route::post('/api/transaction_insert', [TransaksiController::class, 'insert']);
+Route::get('/api/transaction_all', [TransaksiController::class, 'get']);

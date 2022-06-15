@@ -13,13 +13,22 @@ class UserController extends Controller
     }
 
     public function get(){
-        //return response()->json($this->database->getReference('user')->getValue());
-        return response()->json(
+       $data = $this->database->getReference('user')->getValue();
+        if($data != null){
+            return response()->json(
                 [
                      "status" => "success"
                     , "success" =>true
-                    , "data" => $this->database->getReference('user')->getValue()]
+                    , "data" => $data]
                 );
+        }else{
+            return response()->json(
+                [
+                    "status" => "failed"
+                    , "success" =>false
+                    , "message" => "data not available"]
+                );
+        }
     }
 
      public function detail($id){
