@@ -20,13 +20,18 @@ class MaterialController extends Controller
             $arr[$no]['stock'] = 0;
             $transaksi = $this->detailTransaksi();
             $maxStok = 0;
+            $minStok = 0;
             if($transaksi != null){
                 foreach ($transaksi as $key => $value1) {
                     if($value['id'] == $value1['material_id']){
-                        $maxStok += $value1['qty'];
+                        if($value1['type'] == 'material_in'){
+                            $maxStok += $value1['qty'];
+                        }else{
+                            $minStok += $value1['qty'];
+                        }
                     }
                 }
-                $arr[$no]['stock'] = $maxStok;
+                $arr[$no]['stock'] = $maxStok - $minStok;
             }
             $arr[$no]['id'] = $value['id'];
             $arr[$no]['name'] = $value['name'];
