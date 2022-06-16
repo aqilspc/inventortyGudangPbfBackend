@@ -36,6 +36,7 @@ class GudangController extends Controller
                 [
                     "status" => "failed"
                     , "success" =>false
+                    , "data" => $arr
                     , "message" => "data not available"]
                 );
         }
@@ -98,6 +99,27 @@ class GudangController extends Controller
                      "status" => "success"
                     , "success" =>true
                     , "message" => 'warehouse has been deleted']
+                );
+    }
+
+    public function getHtmlOption()
+    {
+        $data = $this->database->getReference('gudang')->getValue();
+        $result = [];
+        if($data != null)
+        {
+            $no = 0;
+            foreach ($data as $key => $value) {
+                $result[$no]['value'] = $value['id'];
+                $result[$no]['text'] = $value['name'];
+                $no++; 
+            }
+        }
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "data" => $result]
                 );
     }
 

@@ -46,7 +46,9 @@ class TransaksiController extends Controller
                     $arr[$no]['user_name'] = 'Data was deleted!';
                 }
 
-                 $arr[$no]['date_transaction'] = $trItem['date_transaction']; 
+                 $arr[$no]['date_transaction'] = $trItem['date_transaction'];
+                 $arr[$no]['qty'] = $trItem['qty']; 
+                 $arr[$no]['type'] = $trItem['type']; 
                  $no++;
             }
         }
@@ -62,6 +64,7 @@ class TransaksiController extends Controller
                 [
                     "status" => "failed"
                     , "success" =>false
+                    , "data" => $arr
                     , "message" => "data not available"]
                 );
         }
@@ -71,24 +74,81 @@ class TransaksiController extends Controller
     public function insert(Request $request)
     {
         $warehouse = $this->detailGudang($request->warehouse_id);
-        $transaksi = $this->detailTransaksi();
-        $maxStok = $request->qty;
-        if($transaksi != null){
-            foreach ($transaksi as $key => $value) {
-                if($request->warehouse_id == $value['warehouse_id']){
-                    $maxStok += $value['qty'];
-                }
-            }
+        $material = $this->detailMaterial($request->material_id);
+        $user = $this->detailUser($request->user_id);
+        if($warehouse == null){
+           return response()->json(
+                    [
+                        "status" => "failed"
+                        , "success" =>false
+                        , "message" => "Warehouse must be select"]
+                    ); 
         }
 
+        if($material == null){
+           return response()->json(
+                    [
+                        "status" => "failed"
+                        , "success" =>false
+                        , "message" => "material must be select"]
+                    ); 
+        }
 
-        if($maxStok > $warehouse['max_capacity']){
-            return response()->json(
-                [
-                    "status" => "failed"
-                    , "success" =>false
-                    , "message" => "Warehouse quota full maximum"]
-                );
+        if($user == null){
+           return response()->json(
+                    [
+                        "status" => "failed"
+                        , "success" =>false
+                        , "message" => "user must be select"]
+                    ); 
+        }
+        $transaksi = $this->detailTransaksi();
+        // if($request->type == 0){
+        //      return response()->json(
+        //             [
+        //                 "status" => "failed"
+        //                 , "success" =>false
+        //                 , "message" => "type must be select"]
+        //             );
+        // }
+        if($request->type == 'material_in'){
+            $maxStok = $request->qty;
+            if($transaksi != null){
+                foreach ($transaksi as $key => $value) {
+                    if($request->warehouse_id == $value['warehouse_id']){
+                        $maxStok += $value['qty'];
+                    }
+                }
+            }
+
+
+            if($maxStok > $warehouse['max_capacity']){
+                return response()->json(
+                    [
+                        "status" => "failed"
+                        , "success" =>false
+                        , "message" => "Warehouse quota full maximum"]
+                    );
+            }
+        }else{
+            $maxStok = $request->qty;
+            if($transaksi != null){
+                foreach ($transaksi as $key => $value) {
+                    if($request->warehouse_id == $value['warehouse_id']){
+                        $maxStok += $value['qty'];
+                    }
+                }
+            }
+
+
+            if($maxStok < $warehouse['min_capacity']){
+                return response()->json(
+                    [
+                        "status" => "failed"
+                        , "success" =>false
+                        , "message" => "Warehouse quota cannot out of minimum capacity"]
+                    );
+            }
         }
 
         $unique = strtotime(date('Y-m-d H:i:s'));
@@ -100,6 +160,7 @@ class TransaksiController extends Controller
             'material_id' => $request->material_id,
             'warehouse_id' => $request->warehouse_id,
             'qty' => $request->qty,
+            'type' => $request->type,
             'date_transaction'=>Carbon::now()->format('Y-m-d')
         ]);
         $material = $this->detailMaterial($request->material_id);
@@ -120,18 +181,30 @@ class TransaksiController extends Controller
     public function detailGudang($id)
     {
         $data = $this->database->getReference('gudang')->getValue();
+        if(!isset($data[$id]))
+        {
+            return null;
+        }
         return $data[$id];
     }
 
     public function detailMaterial($id)
     {
         $data = $this->database->getReference('material')->getValue();
+        if(!isset($data[$id]))
+        {
+            return null;
+        }
         return $data[$id];
     }
 
     public function detailUser($id)
     {
         $data = $this->database->getReference('user')->getValue();
+        if(!isset($data[$id]))
+        {
+            return null;
+        }
         return $data[$id];
     }
 

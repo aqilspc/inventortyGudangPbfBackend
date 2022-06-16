@@ -13,14 +13,23 @@ class MaterialController extends Controller
     }
 
     public function get(){
-       $data = $this->database->getReference('material')->getValue();
+        $data = $this->database->getReference('material')->getValue();
         $arr = [];
         $no=0;
         foreach ($data as $key => $value) {
-
+            $arr[$no]['stock'] = 0;
+            $transaksi = $this->detailTransaksi();
+            $maxStok = 0;
+            if($transaksi != null){
+                foreach ($transaksi as $key => $value1) {
+                    if($value['id'] == $value1['material_id']){
+                        $maxStok += $value1['qty'];
+                    }
+                }
+                $arr[$no]['stock'] = $maxStok;
+            }
             $arr[$no]['id'] = $value['id'];
             $arr[$no]['name'] = $value['name'];
-            $arr[$no]['stock'] = $value['stock'];
             $arr[$no]['jenis_material'] = $value['jenis_material'];
             $no++;
         }
@@ -37,6 +46,7 @@ class MaterialController extends Controller
                 [
                     "status" => "failed"
                     , "success" =>false
+                    , "data" => $arr
                     , "message" => "data not available"]
                 );
         }
@@ -62,9 +72,9 @@ class MaterialController extends Controller
         ->set([
             'id'=>$unique,
             'name' => $request->name,
-            'stock'=>0,
+            //'stock'=>0,
             'jenis_material' => $request->jenis_material,
-            'jumlah_material' => $request->jumlah_material
+            'stock' => 0
         ]);
         return response()->json(
                 [
@@ -82,7 +92,7 @@ class MaterialController extends Controller
             'name' => $request->name,
             //'stock'=>0,
             'jenis_material' => $request->jenis_material,
-            'jumlah_material' => $request->jumlah_material
+            'stock' => $request->stock
         ]);
 
         return response()->json(
@@ -103,6 +113,33 @@ class MaterialController extends Controller
                      "status" => "success"
                     , "success" =>true
                     , "message" => 'materials has been deleted']
+                );
+    }
+
+    public function detailTransaksi()
+    {
+        $data = $this->database->getReference('transaksi')->getValue();
+        return $data;
+    }
+
+    public function getHtmlOption()
+    {
+        $data = $this->database->getReference('material')->getValue();
+        $result = [];
+        if($data != null)
+        {
+            $no = 0;
+            foreach ($data as $key => $value) {
+                $result[$no]['value'] = $value['id'];
+                $result[$no]['text'] = $value['name'];
+                $no++; 
+            }
+        }
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "data" => $result]
                 );
     }
 

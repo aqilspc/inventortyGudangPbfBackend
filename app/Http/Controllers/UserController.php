@@ -159,4 +159,25 @@ class UserController extends Controller
         
     }
 
+    public function getHtmlOption()
+    {
+        $data = $this->database->getReference('user')->getValue();
+        $result = [];
+        if($data != null)
+        {
+            $no = 0;
+            foreach ($data as $key => $value) {
+                $result[$no]['value'] = $value['id'];
+                $result[$no]['text'] = $value['name'];
+                $no++; 
+            }
+        }
+        return response()->json(
+                [
+                     "status" => "success"
+                    , "success" =>true
+                    , "data" => $result]
+                );
+    }
+
 }
